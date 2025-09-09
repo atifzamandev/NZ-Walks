@@ -1,7 +1,6 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using NZ_Walks.API.Data;
-using NZ_Walks.API.Models.Domain;
+using NZ_Walks.API.Models.DTO;
 
 namespace NZ_Walks.API.Controllers
 {
@@ -19,8 +18,23 @@ namespace NZ_Walks.API.Controllers
         [HttpGet]
         public IActionResult GetAllRegions()
         {
-            var regions = dbContext.Regions.ToList();
-            return Ok(regions);
+            var regionsDomain = dbContext.Regions.ToList();
+
+            var regionsDto = new List<RegionsDto>();
+
+            foreach (var regionDomain in regionsDomain)
+            {
+
+                regionsDto.Add(new RegionsDto()
+                {
+                    Id = regionDomain.Id,
+                    Code = regionDomain.Code,
+                    Name = regionDomain.Name,
+                    RegionImageUrl = regionDomain.RegionImageUrl,
+
+                });
+            }
+            return Ok(regionsDto);
         }
 
         [HttpGet]
@@ -28,27 +42,45 @@ namespace NZ_Walks.API.Controllers
         public IActionResult GetRegionById([FromRoute] Guid id)
         {
             //var region = dbContext.Regions.Find(id);
-            var region = dbContext.Regions.FirstOrDefault(x => x.Id == id);
+            var regionDomainById = dbContext.Regions.FirstOrDefault(x => x.Id == id);
 
-            if (region == null)
+            if (regionDomainById == null)
             {
                 return NotFound();
             }
-            return Ok(region);
+
+            var regionDto = new RegionsDto()
+            {
+                Id = regionDomainById.Id,
+                Code = regionDomainById.Code,
+                Name = regionDomainById.Name,
+                RegionImageUrl = regionDomainById.RegionImageUrl,
+
+            };
+            return Ok(regionDto);
         }
 
         [HttpGet("region-code")]
-       // [Route("{code}")]
+        // [Route("{code}")]
         public IActionResult GetRegionByCode([FromQuery] string code)
         {
-            var regionCode = dbContext.Regions.FirstOrDefault(x => x.Code == code);
+            var regionByCode = dbContext.Regions.FirstOrDefault(x => x.Code == code);
 
-            if (regionCode == null)
+            if (regionByCode == null)
             {
                 return NotFound();
             }
 
-            return Ok(regionCode);
+
+            var regionDto = new RegionsDto()
+            {
+                Id = regionByCode.Id,
+                Code = regionByCode.Code,
+                Name = regionByCode.Name,
+                RegionImageUrl = regionByCode.RegionImageUrl,
+            };
+
+            return Ok(regionDto);
         }
 
 
