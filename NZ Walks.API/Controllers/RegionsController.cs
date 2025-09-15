@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using NZ_Walks.API.Data;
 using NZ_Walks.API.Models.Domain;
 using NZ_Walks.API.Models.DTO;
@@ -17,9 +18,9 @@ namespace NZ_Walks.API.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetAllRegions()
+        public async Task<IActionResult> GetAllRegions()
         {
-            var regionsDomain = dbContext.Regions.ToList();
+            var regionsDomain = await dbContext.Regions.ToListAsync();
 
             var regionsDto = new List<RegionsDto>();
 
@@ -40,10 +41,10 @@ namespace NZ_Walks.API.Controllers
 
         [HttpGet]
         [Route("{id:guid}")]
-        public IActionResult GetRegionById([FromRoute] Guid id)
+        public async Task<IActionResult> GetRegionById([FromRoute] Guid id)
         {
             //var region = dbContext.Regions.Find(id);
-            var regionDomainById = dbContext.Regions.FirstOrDefault(x => x.Id == id);
+            var regionDomainById = await dbContext.Regions.FirstOrDefaultAsync(x => x.Id == id);
 
             if (regionDomainById == null)
             {
@@ -63,9 +64,9 @@ namespace NZ_Walks.API.Controllers
 
         [HttpGet("region-code")]
         // [Route("{code}")]
-        public IActionResult GetRegionByCode([FromQuery] string code)
+        public async Task<IActionResult> GetRegionByCode([FromQuery] string code)
         {
-            var regionByCode = dbContext.Regions.FirstOrDefault(x => x.Code == code);
+            var regionByCode = await dbContext.Regions.FirstOrDefaultAsync(x => x.Code == code);
 
             if (regionByCode == null)
             {
@@ -84,7 +85,7 @@ namespace NZ_Walks.API.Controllers
         }
 
         [HttpPost]
-        public IActionResult Create([FromBody] AddRegionRequestDto addRegionRequestDto)
+        public async Task<IActionResult> Create([FromBody] AddRegionRequestDto addRegionRequestDto)
         {
 
             var regionDomainModel = new Region()
@@ -94,8 +95,8 @@ namespace NZ_Walks.API.Controllers
                 RegionImageUrl = addRegionRequestDto.RegionImageUrl,
             };
 
-            dbContext.Regions.Add(regionDomainModel);
-            dbContext.SaveChanges();
+            await dbContext.Regions.AddAsync(regionDomainModel);
+            await dbContext.SaveChangesAsync();
 
             var regionDto = new RegionsDto()
             {
@@ -111,10 +112,10 @@ namespace NZ_Walks.API.Controllers
 
         [HttpPut]
         [Route("{id:Guid}")]
-        public IActionResult update([FromRoute] Guid id, [FromBody] UpdateRegionRequestDto updateRegionRequestDto ) 
+        public async Task<IActionResult> update([FromRoute] Guid id, [FromBody] UpdateRegionRequestDto updateRegionRequestDto)
         {
 
-            var regionDomainModel = dbContext.Regions.FirstOrDefault(r => r.Id == id);
+            var regionDomainModel = await dbContext.Regions.FirstOrDefaultAsync(r => r.Id == id);
 
             if (regionDomainModel == null) return NotFound();
 
@@ -122,7 +123,7 @@ namespace NZ_Walks.API.Controllers
             regionDomainModel.Name = updateRegionRequestDto.Name;
             regionDomainModel.RegionImageUrl = updateRegionRequestDto.RegionImageUrl;
 
-            dbContext.SaveChanges();
+            await dbContext.SaveChangesAsync();
 
             var regionDto = new RegionsDto()
             {
@@ -138,16 +139,17 @@ namespace NZ_Walks.API.Controllers
         }
         [HttpDelete]
         [Route("{id:guid}")]
-        public IActionResult delete([FromRoute] Guid id) 
+        public async Task<IActionResult> delete([FromRoute] Guid id)
         {
-            var regionDomainModel = dbContext.Regions.FirstOrDefault(r => r.Id == id);
+            var regionDomainModel = await dbContext.Regions.FirstOrDefaultAsync(r => r.Id == id);
 
-            if(regionDomainModel == null) return NotFound();
+            if (regionDomainModel == null) return NotFound();
 
             dbContext.Regions.Remove(regionDomainModel);
-            dbContext.SaveChanges();
+            await dbContext.SaveChangesAsync();
 
-            var regionDto = new RegionsDto() {
+            var regionDto = new RegionsDto()
+            {
                 Id = regionDomainModel.Id,
                 Code = regionDomainModel.Code,
                 Name = regionDomainModel.Name,
@@ -155,7 +157,7 @@ namespace NZ_Walks.API.Controllers
             };
 
             return Ok(regionDto);
-        
+
         }
 
     }
