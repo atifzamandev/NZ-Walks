@@ -7,8 +7,8 @@
         public required string Description { get; set; }
         public double LengthInKm { get; set; }
         public string? WalkImageUrl { get; set; }
-        public RegionsDto Region { get; set; }
-        public DifficultyDto Difficulty { get; set; }
+        public RegionsDto? Region { get; set; }
+        public DifficultyDto? Difficulty { get; set; }
         }
     }
 

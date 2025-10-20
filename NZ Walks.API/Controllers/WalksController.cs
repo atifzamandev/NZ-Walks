@@ -30,7 +30,7 @@ namespace NZ_Walks.API.Controllers
 
             var walkDto = mapper.Map<WalkDto>(walkDomainModel);
 
-            return Ok(walkDto);
+            return CreatedAtAction(nameof(GetWalkById), new { walkDto.Id }, walkDto);
             }
         [HttpGet]
         public async Task<IActionResult> GetAllWalks()
@@ -38,6 +38,43 @@ namespace NZ_Walks.API.Controllers
             var walksDomainModel = await walkRepository.GetAllWalksAsync();
             var walksDto = mapper.Map<List<WalkDto>>(walksDomainModel);
             return Ok(walksDto);
+            }
+        [HttpGet]
+        [Route("{id:guid}")]
+        public async Task<IActionResult> GetWalkById([FromRoute] Guid id)
+            {
+
+            var walkDomainModel = await walkRepository.GetWalkByIdAsync(id);
+
+            if(walkDomainModel == null) return NotFound();
+
+            return Ok(mapper.Map<WalkDto>(walkDomainModel));
+            }
+        [HttpPut]
+        [Route("{id:guid}")]
+        public async Task<IActionResult> UpdateWalk([FromRoute] Guid id, WalkDto walkDto)
+            {
+            var walkDomainModel = mapper.Map<Walk>(walkDto);
+            walkDomainModel = await walkRepository.UpdateWalkAsync(id, walkDomainModel);
+
+            if(walkDomainModel == null) return NotFound();
+
+            var walkDtoModel = mapper.Map<WalkDto>(walkDomainModel);
+            return Ok(walkDtoModel);
+
+            }
+        [HttpDelete]
+        [Route("{id:guid}")]
+        public async Task<IActionResult> DeleteWalk([FromRoute] Guid id)
+            {
+            var walkModel = await walkRepository.DeleteWalkAsync(id);
+
+            if(walkModel == null) return NotFound();
+
+            var walkDto = mapper.Map<WalkDto>(walkModel);
+
+            return Ok(walkDto);
+
             }
 
         }
