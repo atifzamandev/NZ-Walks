@@ -52,9 +52,9 @@ namespace NZ_Walks.API.Controllers
             }
         [HttpPut]
         [Route("{id:guid}")]
-        public async Task<IActionResult> UpdateWalk([FromRoute] Guid id, WalkDto walkDto)
+        public async Task<IActionResult> UpdateWalk([FromRoute] Guid id, UpdateWalkRequestsDto updateWalkRequestsDto)
             {
-            var walkDomainModel = mapper.Map<Walk>(walkDto);
+            var walkDomainModel = mapper.Map<Walk>(updateWalkRequestsDto);
             walkDomainModel = await walkRepository.UpdateWalkAsync(id, walkDomainModel);
 
             if(walkDomainModel == null) return NotFound();
@@ -67,13 +67,13 @@ namespace NZ_Walks.API.Controllers
         [Route("{id:guid}")]
         public async Task<IActionResult> DeleteWalk([FromRoute] Guid id)
             {
-            var walkModel = await walkRepository.DeleteWalkAsync(id);
+            var deletedWalkModel = await walkRepository.DeleteWalkAsync(id);
 
-            if(walkModel == null) return NotFound();
+            if(deletedWalkModel == null) return NotFound();
 
-            var walkDto = mapper.Map<WalkDto>(walkModel);
+            var deletedWalkDto = mapper.Map<WalkDto>(deletedWalkModel);
 
-            return Ok(walkDto);
+            return Ok(deletedWalkDto);
 
             }
 
