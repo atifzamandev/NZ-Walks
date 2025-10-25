@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using NZ_Walks.API.CustomActionFilters;
 using NZ_Walks.API.Data;
 using NZ_Walks.API.Models.Domain;
 using NZ_Walks.API.Models.DTO;
@@ -58,6 +59,7 @@ namespace NZ_Walks.API.Controllers
             }
 
         [HttpPost]
+        [ValidateModel]
         public async Task<IActionResult> CreateRegion([FromBody] AddRegionRequestDto addRegionRequestDto)
             {
 
@@ -73,6 +75,7 @@ namespace NZ_Walks.API.Controllers
 
         [HttpPut]
         [Route("{id:Guid}")]
+        [ValidateModel]
         public async Task<IActionResult> UpdateRegion([FromRoute] Guid id, [FromBody] UpdateRegionRequestDto updateRegionRequestDto)
             {
 
