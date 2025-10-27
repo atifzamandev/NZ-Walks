@@ -35,9 +35,9 @@ namespace NZ_Walks.API.Controllers
             return CreatedAtAction(nameof(GetWalkById), new { walkDto.Id }, walkDto);
             }
         [HttpGet]
-        public async Task<IActionResult> GetAllWalks()
+        public async Task<IActionResult> GetAllWalks([FromQuery] string? filterOn, [FromQuery] string? filterQuery)
             {
-            var walksDomainModel = await walkRepository.GetAllWalksAsync();
+            var walksDomainModel = await walkRepository.GetAllWalksAsync(filterOn, filterQuery);
             var walksDto = mapper.Map<List<WalkDto>>(walksDomainModel);
             return Ok(walksDto);
             }
