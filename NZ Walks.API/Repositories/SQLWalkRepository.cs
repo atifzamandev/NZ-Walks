@@ -18,7 +18,7 @@ namespace NZ_Walks.API.Repositories
             await dbContext.SaveChangesAsync();
             return walk;
             }
-        public async Task<List<Walk>> GetAllWalksAsync(string? filterOn = null, string? filterQuery = null, string? sortBy = null, bool isAscending = true)
+        public async Task<List<Walk>> GetAllWalksAsync(string? filterOn = null, string? filterQuery = null, string? sortBy = null, bool isAscending = true, int pageNumber = 1, int pageSize = 5)
             {
             var walks = dbContext.Walks
             .Include(x => x.Difficulty)
@@ -43,8 +43,9 @@ namespace NZ_Walks.API.Repositories
                     walks = isAscending ? walks.OrderBy(x => x.LengthInKm) : walks.OrderByDescending(x => x.LengthInKm);
                     }
                 }
+            var skipResults = (pageNumber - 1) * pageSize;
 
-            return await walks.ToListAsync();
+            return await walks.Skip(skipResults).Take(pageSize).ToListAsync();
             }
 
         public async Task<Walk?> GetWalkByIdAsync(Guid id)
