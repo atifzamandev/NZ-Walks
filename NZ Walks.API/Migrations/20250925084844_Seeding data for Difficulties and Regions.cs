@@ -1,18 +1,17 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore.Migrations;
+﻿using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
 #pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
 
 namespace NZ_Walks.API.Migrations
-{
-    /// <inheritdoc />
-    public partial class SeedingdataforDifficultiesandRegions : Migration
     {
+    /// <inheritdoc />
+    public partial class SeedingdataforDifficultiesandRegions:Migration
+        {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
-        {
+            {
             migrationBuilder.InsertData(
                 table: "Difficulties",
                 columns: new[] { "Id", "Name" },
@@ -44,11 +43,11 @@ namespace NZ_Walks.API.Migrations
                     { new Guid("f28646ca-9331-40cf-a525-fe2abe7c6829"), "NZ-H", "Hawke's Bay", "https://picsum.photos/id/15/2500/1667" },
                     { new Guid("f4c674b6-be9f-4d3c-a2c0-b10465d5a470"), "NZ-B", "Bay of Plenty", "https://picsum.photos/id/13/2500/1667" }
                 });
-        }
+            }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
-        {
+            {
             migrationBuilder.DeleteData(
                 table: "Difficulties",
                 keyColumn: "Id",
@@ -138,6 +137,6 @@ namespace NZ_Walks.API.Migrations
                 table: "Regions",
                 keyColumn: "Id",
                 keyValue: new Guid("f4c674b6-be9f-4d3c-a2c0-b10465d5a470"));
+            }
         }
     }
-}

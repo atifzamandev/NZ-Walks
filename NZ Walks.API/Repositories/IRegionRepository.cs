@@ -1,9 +1,9 @@
 ﻿using NZ_Walks.API.Models.Domain;
 
 namespace NZ_Walks.API.Repositories
-{
-    public interface IRegionRepository
     {
+    public interface IRegionRepository
+        {
         Task<List<Region>> GetAllRegionsAsync();
         Task<Region?> GetRegionByIdAsync(Guid id);
 
@@ -15,5 +15,5 @@ namespace NZ_Walks.API.Repositories
 
         Task<Region?> DeleteRegionAsync(Guid id);
 
+        }
     }
-}
