@@ -19,10 +19,10 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options =>
 {
     options.SwaggerDoc("v1", new OpenApiInfo
-        {
+    {
         Title = "NZ Walks API",
         Version = "v1"
-        });
+    });
 
     options.AddSecurityRequirement(new OpenApiSecurityRequirement
     {
@@ -49,6 +49,7 @@ builder.Services.AddDbContext<NZWalksAuthDbContext>(options =>
 });
 builder.Services.AddScoped<IRegionRepository, SQLRegionRepository>();
 builder.Services.AddScoped<IWalkRepository, SQLWalkRepository>();
+builder.Services.AddScoped<ITokenRepository, TokenRepository>();
 
 builder.Services.AddAutoMapper(cfg => { }, typeof(AutoMapperProfiles));
 
@@ -70,7 +71,7 @@ builder.Services.Configure<IdentityOptions>(cfg =>
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options => options.TokenValidationParameters = new TokenValidationParameters
-        {
+    {
         ValidateIssuer = true,
         ValidateAudience = true,
         ValidateLifetime = true,
@@ -78,16 +79,16 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         ValidIssuer = builder.Configuration["Jwt:Issuer"],
         ValidAudience = builder.Configuration["Jwt:Audience"],
         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
-        });
+    });
 
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
 if(app.Environment.IsDevelopment())
-    {
+{
     app.UseSwagger();
     app.UseSwaggerUI();
-    }
+}
 
 app.UseHttpsRedirection();
 

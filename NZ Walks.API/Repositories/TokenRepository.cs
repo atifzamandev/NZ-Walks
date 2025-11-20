@@ -16,7 +16,7 @@ namespace NZ_Walks.API.Repositories
 
         }
 
-        public string CreateJWTToken(IdentityUser user, List<string> roles, JwtSecurityTokenHandler jwtSecurityTokenHandler)
+        public string CreateJWTToken(IdentityUser user, List<string> roles)
         {
             var claims = new List<Claim>();
 
@@ -42,6 +42,5 @@ namespace NZ_Walks.API.Repositories
             return new JwtSecurityTokenHandler().WriteToken(token);
 
         }
-
     }
 }
