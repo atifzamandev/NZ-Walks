@@ -2,13 +2,13 @@
 using NZ_Walks.API.Models.Domain;
 
 namespace NZ_Walks.API.Data
-    {
+{
     public class NZWalksDbContext:DbContext
-        {
+    {
         public NZWalksDbContext(DbContextOptions<NZWalksDbContext> dbContextOptions) : base(dbContextOptions)
-            {
+        {
 
-            }
+        }
 
 
         public DbSet<Difficulty> Difficulties { get; set; }
@@ -17,9 +17,11 @@ namespace NZ_Walks.API.Data
 
         public DbSet<Walk> Walks { get; set; }
 
+        public DbSet<Image> Images { get; set; }
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
-            {
+        {
             base.OnModelCreating(modelBuilder);
 
             var difficulty = new List<Difficulty>() {
@@ -156,7 +158,7 @@ namespace NZ_Walks.API.Data
             modelBuilder.Entity<Region>().HasData(regions);
 
 
-            }
-
         }
+
     }
+}
