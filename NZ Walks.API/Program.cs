@@ -7,12 +7,21 @@ using Microsoft.OpenApi.Models;
 using NZ_Walks.API.Data;
 using NZ_Walks.API.Mappings;
 using NZ_Walks.API.Repositories;
+using Serilog;
 using System.Text;
 
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+
+var logger = new LoggerConfiguration()
+    .WriteTo.Console()
+    .MinimumLevel.Warning()
+    .CreateLogger();
+
+builder.Logging.ClearProviders();
+builder.Logging.AddSerilog(logger);
 
 builder.Services.AddControllers();
 builder.Services.AddHttpContextAccessor();

@@ -6,6 +6,7 @@ using NZ_Walks.API.Data;
 using NZ_Walks.API.Models.Domain;
 using NZ_Walks.API.Models.DTO;
 using NZ_Walks.API.Repositories;
+using System.Text.Json;
 
 namespace NZ_Walks.API.Controllers
 {
@@ -16,20 +17,35 @@ namespace NZ_Walks.API.Controllers
         private readonly NZWalksDbContext dbContext;
         private readonly IRegionRepository regionRepository;
         private readonly IMapper mapper;
+        private readonly ILogger<RegionsController> logger;
 
-        public RegionsController(NZWalksDbContext dbContext, IRegionRepository regionRepository, IMapper mapper)
+        public RegionsController(NZWalksDbContext dbContext, IRegionRepository regionRepository, IMapper mapper, ILogger<RegionsController> logger)
+
         {
             this.dbContext = dbContext;
             this.regionRepository = regionRepository;
             this.mapper = mapper;
+            this.logger = logger;
         }
 
         [HttpGet]
-        [Authorize(Roles = "Reader")]
+        //[Authorize(Roles = "Reader")]
         public async Task<IActionResult> GetAllRegions()
         {
-            var regionsDomain = await regionRepository.GetAllRegionsAsync();
-            return Ok(mapper.Map<List<RegionsDto>>(regionsDomain));
+            try
+            {
+                var regionsDomain = await regionRepository.GetAllRegionsAsync();
+
+                logger.LogInformation($"Region domain model data: {JsonSerializer.Serialize(regionsDomain)}");
+                return Ok(mapper.Map<List<RegionsDto>>(regionsDomain));
+
+            }
+            catch(Exception ex)
+            {
+                logger.LogError(ex, "An error occurred in GetAllRegions: {ErrorMessage}", ex.Message);
+                throw;
+            }
+
         }
 
         [HttpGet]
