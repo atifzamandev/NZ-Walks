@@ -11,6 +11,8 @@
             <th>Id</th>
             <th>Code</th>
             <th>Name</th>
+            <th>Edit</th>
+
         </tr>
     </thead>
     <tbody>
@@ -20,6 +22,9 @@
                 <td>@region.Id</td>
                 <td>@region.Code</td>
                 <td>@region.Name</td>
+                <td>
+                    <a asp-controller="Region" asp-action="Edit" asp-route-id="@region.Id" btn btn-light>Edit</a>
+                </td>
             </tr>
         }
     </tbody>

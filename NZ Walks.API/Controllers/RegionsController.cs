@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using NZ_Walks.API.CustomActionFilters;
 using NZ_Walks.API.Data;
@@ -50,7 +49,7 @@ namespace NZ_Walks.API.Controllers
 
         [HttpGet]
         [Route("{id:guid}")]
-        [Authorize(Roles = "Reader")]
+        //[Authorize(Roles = "Reader")]
 
         public async Task<IActionResult> GetRegionById([FromRoute] Guid id)
         {
@@ -66,7 +65,7 @@ namespace NZ_Walks.API.Controllers
         }
 
         [HttpGet("region-code")]
-        [Authorize(Roles = "Reader")]
+        //[Authorize(Roles = "Reader")]
 
         public async Task<IActionResult> GetRegionByCode([FromQuery] string code)
         {
@@ -100,7 +99,7 @@ namespace NZ_Walks.API.Controllers
         [HttpPut]
         [Route("{id:Guid}")]
         [ValidateModel]
-        [Authorize(Roles = "Writer")]
+        //   [Authorize(Roles = "Writer")]
 
         public async Task<IActionResult> UpdateRegion([FromRoute] Guid id, [FromBody] UpdateRegionRequestDto updateRegionRequestDto)
         {
@@ -117,7 +116,7 @@ namespace NZ_Walks.API.Controllers
         }
         [HttpDelete]
         [Route("{id:guid}")]
-        [Authorize(Roles = "Writer, Reader")]
+        //[Authorize(Roles = "Writer, Reader")]
 
         public async Task<IActionResult> DeleteRegionAsync([FromRoute] Guid id)
         {
